@@ -77,7 +77,8 @@ La lectura es directa: el proyecto **necesita colocar el biometano por encima de
 ~{BREAKEVEN['precio_van0']:.2f} €/Nm³** para no destruir valor, y a partir de
 ~{BREAKEVEN['precio_p75']:.2f} €/Nm³ la apuesta ya es cómoda (75 % de probabilidad de éxito).
 El precio central de mercado asumido ({BREAKEVEN['precio_central']:.2f} €/Nm³) queda por
-encima de ambos — hay colchón, pero es **finito**: una caída sostenida del precio de ~8 % se
+encima de ambos — hay colchón, pero es **finito**: una caída sostenida del precio de
+~{(1 - BREAKEVEN['precio_van0'] / BREAKEVEN['precio_central']) * 100:.0f} % se
 lo come.
 """
 )

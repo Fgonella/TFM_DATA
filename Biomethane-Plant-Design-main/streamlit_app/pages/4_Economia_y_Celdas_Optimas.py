@@ -38,10 +38,16 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+econ = load_economia()
+viables = load_viables_geo()
+umb = umbrales_optimo(econ)
+n_optimas = int(econ["viable"].sum())
+n_total = len(econ)
+
 st.title("💰 Sección 4 · Economía celda a celda y el filtro de las óptimas")
 st.markdown(
-    """
-En la siguiente parte del trabajo se hace **la cuenta de resultados (Margen) completa a las 2.890 celdas
+    f"""
+En la siguiente parte del trabajo se hace **la cuenta de resultados (Margen) completa a las {fmt_int(n_total)} celdas
 viables**. Para cada una: purín movilizable en 10 km → biometano producible → ingresos,
 OPEX, amortización → **margen anual** en tres escenarios de precio (pesimista, base,
 optimista).
@@ -49,14 +55,8 @@ optimista).
 """
 )
 
-econ = load_economia()
-viables = load_viables_geo()
-umb = umbrales_optimo(econ)
-n_optimas = int(econ["viable"].sum())
-n_total = len(econ)
-
 st.divider()
-st.subheader("La foto económica de las 2.890 celdas")
+st.subheader(f"La foto económica de las {fmt_int(n_total)} celdas")
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Margen base mediano", f"{econ['margen_base_€'].median()/1e6:.2f} M€/año")
@@ -179,8 +179,8 @@ with st.expander("🌍 Mapa interactivo completo"):
 st.divider()
 st.subheader("Random Forest de apoyo...")
 st.markdown(
-    """
-Entrenamos dos Random Forest sobre las 2.890 celdas: uno clasifica óptima/no óptima y otro
+    f"""
+Entrenamos dos Random Forest sobre las {fmt_int(n_total)} celdas: uno clasifica óptima/no óptima y otro
 predice el margen. Aca  lo importante no es predecir, eltarget lo definimos nosotros, así que un
 F1 alto no sorprende a nadie. La gracia es la **importancia de variables**: el modelo,
 mirando solo los datos, redescubre que lo que separa una óptima de una que no lo es, son la
@@ -213,7 +213,7 @@ st.plotly_chart(fig_sc, width="stretch")
 st.divider()
 st.success(
     f"**Nota**: de {fmt_int(n_total)} celdas viables, {n_optimas} son óptimas "
-    "(~7 %): suministro asegurado a 2040, gasoducto a menos de 2 km y margen en el cuartil "
+    f"(~{n_optimas/n_total*100:.0f} %): suministro asegurado a 2040, gasoducto a menos de 2 km y margen en el cuartil "
     "superior. Pero el margen es una foto con supuestos fijos — y el mundo real no fija nada. "
     "Lo que sigue es someter a esas óptimas a 25.000 futuros distintos."
 )

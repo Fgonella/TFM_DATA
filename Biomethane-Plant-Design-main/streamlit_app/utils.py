@@ -76,7 +76,7 @@ def load_scoring() -> pd.DataFrame:
 
 @st.cache_data(show_spinner="Cargando celdas viables...")
 def load_viables_geo() -> gpd.GeoDataFrame:
-    """Las 2.890 celdas viables con geometría (entrada del notebook FINAL)."""
+    """Las 744 celdas viables con geometría (entrada del notebook FINAL)."""
     gdf = gpd.read_file(DATA / "viables_interseccion.gpkg")
     gdf["cell_id"] = gdf["cell_id"].astype(int)
     return gdf.to_crs(4326)
@@ -177,10 +177,11 @@ MC_DIST = {
 # Curva de arranque de producción (años 1 a 15) — notebook FINAL
 RAMP = [0.60, 0.60, 0.60, 0.60, 0.60, 0.70, 0.80, 0.80, 0.90, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00]
 
-# Break-even de la mejor localización — salida de la última corrida del notebook
+# Break-even de la mejor localización (celda 13846, Grande) — salida de la última
+# corrida del notebook viabilidad_economica.ipynb
 BREAKEVEN = {
-    "precio_van0": 0.648,     # €/Nm³ para VAN esperado = 0
-    "precio_p75": 0.666,      # €/Nm³ para P(VAN>0) = 75 %
+    "precio_van0": 0.654,     # €/Nm³ para VAN esperado = 0
+    "precio_p75": 0.671,      # €/Nm³ para P(VAN>0) = 75 %
     "precio_central": 0.70,   # moda de la triangular
 }
 

@@ -27,10 +27,16 @@ st.markdown(
 
 st.set_page_config(page_title="Idoneidad geoespacial · Biometano Huesca", page_icon="🗺️", layout="wide")
 
+scoring = load_scoring()
+viables = load_viables_geo()
+
+n_total = len(scoring)
+n_viables = len(viables)
+
 st.title("🗺️ Sección 2 · Idoneidad geoespacial: Elección de las celdas")
 st.markdown(
-    """
-Sobre la provincia de Huesca se tiende una malla de **63.612 celdas de 500×500 metros** y a cada una
+    f"""
+Sobre la provincia de Huesca se tiende una malla de **{fmt_int(n_total)} celdas de 500×500 metros** y a cada una
 se le cruzan seis capas de información: biomasa porcina en un radio de 10 km, distancia al
 gasoducto, distancia y categoría de la carretera más cercana, pendiente del terreno (DEM),
 clasificación urbanística del suelo y restricciones de la Red Natura 2000.
@@ -38,12 +44,9 @@ clasificación urbanística del suelo y restricciones de la Red Natura 2000.
 La lógica es de dos pasos: primero se **excluye** lo que directamente no puede ser (zona
 protegida, pendiente imposible, sin purín cerca...), y al resto se le pone un **score de
 idoneidad ponderado**. Las que superan además umbrales estrictos de contraste quedan como
-**viables** — y esas 2.890 celdas son las protagonistas del resto de la historia.
+**viables** — y esas {fmt_int(n_viables)} celdas son las protagonistas del resto de la historia.
 """
 )
-
-scoring = load_scoring()
-viables = load_viables_geo()
 
 st.divider()
 st.subheader("El embudo")
@@ -60,6 +63,13 @@ fig_funnel = go.Figure(go.Funnel(
 ))
 fig_funnel.update_layout(height=320)
 st.plotly_chart(fig_funnel, width="stretch")
+
+st.caption(
+    "El salto de **aptas → viables** aplica cuatro **umbrales estrictos** simultáneos, más "
+    "exigentes que los de exclusión: biomasa en 10 km **≥ 120.000 plazas**, gasoducto "
+    "**≤ 3.000 m**, pendiente media **≤ 15°** y categoría de vía **≥ 3** (primaria o mejor). "
+    "Solo las celdas que cumplen las cuatro a la vez pasan el filtro."
+)
 st.divider()
 col1, col2 = st.columns(2)
 
@@ -79,28 +89,29 @@ with col1:
     st.dataframe(exclusion_df, width="stretch", hide_index=True)
 
 with col2:
-    st.subheader("Pesos del score")
+    st.subheader("Pesos del score (AHP)")
     pesos_df = pd.DataFrame(
         [
-            ["Distancia a gasoducto", "25 %"],
-            ["Biomasa porcina en 10 km", "25 %"],
-            ["Clasificación del suelo", "15 %"],
-            ["Pendiente media", "10 %"],
-            ["Distancia a núcleos urbanos", "10 %"],
-            ["Categoría de la vía cercana", "7 %"],
-            ["Distancia a carretera", "5 %"],
-            ["Red Natura 2000", "3 %"],
+            ["Biomasa porcina en 10 km", "29,3 %"],
+            ["Distancia a gasoducto", "29,3 %"],
+            ["Clasificación del suelo", "14,6 %"],
+            ["Categoría de la vía cercana", "9,8 %"],
+            ["Pendiente media", "7,3 %"],
+            ["Distancia a carretera", "4,9 %"],
+            ["Distancia a núcleos urbanos", "4,9 %"],
         ],
         columns=["Variable", "Peso"],
     )
     st.dataframe(pesos_df, width="stretch", hide_index=True)
     st.caption(
-        "Gasoducto y biomasa se llevan la mitad del score entre las dos — un adelanto de lo "
-        "que después confirman los modelos del capítulo 4: son las variables que mandan."
+        "Pesos derivados por **AHP** (matriz de comparación por pares de Saaty, CR < 0,1). "
+        "La Red Natura 2000 no puntúa: ya actúa como exclusión binaria. Biomasa y gasoducto "
+        "se llevan casi el 60 % del score entre las dos — un adelanto de lo que después "
+        "confirman los modelos del capítulo 4: son las variables que mandan."
     )
 
 st.divider()
-st.subheader("El mapa de las 2.890 celdas viables")
+st.subheader(f"El mapa de las {fmt_int(n_viables)} celdas viables")
 st.markdown(
     """
 Cada polígono es una celda de 500×500 m que sobrevivió a todos los filtros. El color es el

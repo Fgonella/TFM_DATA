@@ -110,12 +110,12 @@ st.divider()
 st.subheader("Paso a Paso hacia las conclusiones")
 
 st.markdown(
-    """
+    f"""
 | Secciones | La pregunta que responde |
 |---|---|
 | 📦 **0 · Los datos de Huesca** | Las seis capas descargadas (granjas, gasoductos, DEM, Red Natura, viario, suelo) sobre la delimitación provincial |
 | 🐷 **1 · El punto de partida** | ¿Por qué purín, por qué España, por qué Huesca? El contexto del censo porcino europeo |
-| 🗺️ **2 · Idoneidad geoespacial** | De 63.612 celdas a 2.890 viables: exclusiones, score ponderado y el mapa de candidatas |
+| 🗺️ **2 · Idoneidad geoespacial** | De {fmt_int(n_total)} celdas a {fmt_int(n_viables)} viables: exclusiones, score ponderado y el mapa de candidatas |
 | 📈 **3 · Proyección a 2040** | ¿El purín va a seguir estando? Forecasting del censo de Huesca con validación temporal |
 | 💰 **4 · Economía y celdas óptimas** | Cuenta de resultados celda a celda y el filtro triple que deja solo las óptimas |
 | 🎲 **5 · Monte Carlo** | 25.000 futuros por sitio: la distribución del VAN, no un número suelto |
