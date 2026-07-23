@@ -9,6 +9,7 @@ from utils import (
     load_delimitacion,
     load_gasoductos,
     load_granjas,
+    load_html_map,
     load_red_natura,
     sidebar_footer,
 )
@@ -210,7 +211,7 @@ st.markdown(
 if st.toggle("🌍 Cargar mapa interactivo de la Red Natura 2000 (Folium, ~9 MB — puede tardar)"):
     mapa_natura = MAP_IMG / "04_red_natura2000" / "mapa_red_natura.html"
     if mapa_natura.exists():
-        components.html(mapa_natura.read_text(encoding="utf-8"), height=620, scrolling=False)
+        components.html(load_html_map(str(mapa_natura)), height=620, scrolling=False)
     else:
         st.info("Ejecutá el notebook 04_red_natura2000 para regenerar el mapa.")
 

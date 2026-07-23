@@ -11,6 +11,7 @@ from utils import (
     fmt_eur,
     fmt_int,
     load_economia,
+    load_html_map,
     load_viables_geo,
     sidebar_footer,
     umbrales_optimo,
@@ -172,7 +173,7 @@ st.subheader("Mapa Final solo celdas óptimas")
 with st.expander("🌍 Mapa interactivo completo"):
     mapa_html = (DATA / "mapa_optimas_biometano.html")
     if mapa_html.exists():
-        components.html(mapa_html.read_text(encoding="utf-8"), height=620, scrolling=False)
+        components.html(load_html_map(str(mapa_html)), height=620, scrolling=False)
     else:
         st.info("Ejecutá el notebook FINAL para regenerar mapa_optimas_biometano.html")
 

@@ -122,6 +122,16 @@ def load_proyeccion_censo() -> pd.DataFrame:
     return pd.read_csv(DATA / "proyeccion_porcino_15anios.csv", parse_dates=["ds"])
 
 
+@st.cache_data(show_spinner="Cargando mapa interactivo...")
+def load_html_map(path_str: str) -> str:
+    """Lee un mapa HTML (Folium) una sola vez y lo cachea.
+
+    Evita releer ficheros pesados (p. ej. el mapa de Red Natura, ~9 MB) en
+    cada rerun de Streamlit, que era lo que castigaba la CPU en Cloud.
+    """
+    return Path(path_str).read_text(encoding="utf-8")
+
+
 def umbrales_optimo(df_econ: pd.DataFrame) -> dict:
     """Recalcula los umbrales de 'óptimo' igual que el notebook FINAL.
 
