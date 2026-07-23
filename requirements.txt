@@ -1,5 +1,38 @@
-streamlit
-plotly
-pandas
-geopandas
-pyogrio
+# TFM Biometano Huesca — requirements consolidado
+# Python 3.11+ recomendado. Versiones fijadas a las probadas (env Data_science).
+# Instalar:  pip install -r requirements.txt
+
+# --- Datos y cálculo numérico ---
+pandas==3.0.3
+numpy==1.26.4
+scipy==1.17.1
+
+# --- Geoespacial ---
+geopandas==1.1.4
+shapely==2.1.2
+pyproj==3.7.2
+rasterio==1.4.4
+rasterstats==0.21.0
+osmnx==2.1.0
+
+# --- Machine learning / estadística / optimización ---
+scikit-learn==1.8.0
+statsmodels==0.14.6
+optuna==4.9.0
+
+# --- Visualización ---
+matplotlib==3.10.9
+seaborn==0.13.2
+plotly==6.8.0
+pydeck==0.9.2
+
+# --- App web (dashboard) ---
+streamlit==1.58.0
+
+# --- Utilidades / IO / red ---
+requests==2.34.2
+urllib3==2.7.0
+tabulate==0.10.0
+
+# --- Financiero (opcional: solo si se usa numpy_financial en viabilidad) ---
+# numpy-financial==1.0.0
