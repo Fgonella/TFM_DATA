@@ -111,6 +111,60 @@ with col2:
     )
 
 st.divider()
+st.subheader("Matriz de correlación de las variables de idoneidad")
+st.markdown(
+    """
+Antes de ponderar nada hay que comprobar que las variables no midan lo mismo dos veces: si dos
+criterios están muy correlacionados, el score les daría **peso doble** a un mismo factor. La matriz
+se calcula sobre las **{n_celdas} celdas** de la malla completa, con las nueve variables originales
+(sin normalizar).
+""".format(n_celdas=fmt_int(n_total))
+)
+
+CORR_COLS = {
+    "biomasa_10km": "Biomasa 10 km",
+    "dist_gasoducto": "Dist. gasoducto",
+    "dist_carretera": "Dist. carretera",
+    "pts_carretera": "Categoría de vía",
+    "dist_nucleos": "Dist. núcleos",
+    "pendiente_media": "Pendiente media",
+    "pendiente_max": "Pendiente máxima",
+    "pts_suelo": "Suelo",
+    "red_natura": "Red Natura",
+}
+
+corr = scoring[list(CORR_COLS)].rename(columns=CORR_COLS).corr().round(2)
+
+fig_corr = px.imshow(
+    corr,
+    text_auto=True,
+    color_continuous_scale="RdBu_r",
+    zmin=-1,
+    zmax=1,
+    aspect="auto",
+)
+fig_corr.update_layout(
+    height=560,
+    margin=dict(l=0, r=0, t=10, b=0),
+    coloraxis_colorbar=dict(title="r"),
+)
+fig_corr.update_xaxes(side="bottom", tickangle=-35)
+fig_corr.update_traces(hovertemplate="%{y} ↔ %{x}<br>r = %{z:.2f}<extra></extra>")
+st.plotly_chart(fig_corr, width="stretch")
+
+st.caption(
+    "**Diagnóstico de multicolinealidad.** El único par realmente problemático es "
+    "**pendiente media ↔ pendiente máxima (r = 0,89)**: miden lo mismo. La decisión no fue eliminar "
+    "una, sino darles **roles distintos y no simultáneos** — `pendiente_media` entra en el score y en "
+    "la exclusión dura (>25°), mientras que `pendiente_max` se conserva solo como variable de "
+    "contexto y **no** se introduce en la matriz AHP. El segundo par más alto, **distancia a "
+    "carretera ↔ distancia a núcleos (r = 0,57)**, es esperable por construcción territorial: ambas "
+    "infraestructuras se concentran en los mismos valles y llanos. Ningún otro par supera el umbral "
+    "de preocupación. Nótese también que la biomasa correlaciona **−0,65** con la pendiente: donde hay "
+    "montaña no hay granjas, que es justo el patrón que después ordena el mapa."
+)
+
+st.divider()
 st.subheader(f"El mapa de las {fmt_int(n_viables)} celdas viables")
 st.markdown(
     """
