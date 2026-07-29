@@ -46,7 +46,7 @@ st.header(' "Del Purin a la Planta de Biometano"')
 st.caption(
 """
     <p style='text-align: center; font-size: 0.85rem; font-family: sans-serif;'>
-        Participantes: Rafa, Bruno, Fernando 
+        Participantes: Rafael Sánchez Clavijo - Bruno Olgiatti - Fernando Gonella
     </p>
     """, 
     unsafe_allow_html=True
